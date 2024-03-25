@@ -1,0 +1,48 @@
+#include <iostream>
+#include <fstream>
+#include <vector>
+
+using namespace std;
+
+//Passos: 1- Ler o ficheiro em blocos e armazenar numa string 
+        //2-Criar um dicionário, usando a hash table como estrutura de dados, com tamanho minimo de 2^16
+        //3-Aplicar o algoritmo (compressão) 
+        //4- Processamento estatístico básico dos resultados? 
+
+// Função para ler um bloco do ficheiro
+vector<char> readBlock(fstream& file, streamsize blockSize) {
+    //lê os valores do ficheiro e armazena-os no vetor "block"
+    vector<char> block(blockSize);
+    //armazenar os dados
+    file.read(block.data(), blockSize);
+    return block; //contém os dados 
+}
+
+// Função para processar um bloco
+void processBlock(const vector<char>& block) {
+    // Exemplo: imprimir o conteúdo do bloco
+    for (char c : block) {
+        cout << c;
+    }
+}
+
+int main() {
+    fstream inputfile;
+    inputfile.open("ola.txt", ios::in | ios::binary); // Abre o ficheiro 
+
+    if (!inputfile.is_open()) { //verifica se o ficheiro existe 
+        cerr << "Erro ao abrir o arquivo." << endl;
+        return 1;
+    }
+
+    const streamsize blockSize = 8192; // Tamanho do bloco em bytes (8KB), em computação, e nao em SI, qual delas deve ser?
+
+    // Ler e processar o ficheiro em blocos
+    while (!inputfile.eof()) {
+        vector<char> block = readBlock(inputfile, blockSize);
+        processBlock(block);
+    }
+
+    inputfile.close();
+    return 0;
+}
